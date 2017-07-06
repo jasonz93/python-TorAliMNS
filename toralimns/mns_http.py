@@ -66,7 +66,7 @@ from .mns_exception import *
 
 class MNSHttp:
     def __init__(self, host, connection_timeout = 60, keep_alive = True, logger=None, is_https=False):
-        self.http_client = tornado.httpclient.AsyncHTTPClient()
+        self.http_client = None
         # if is_https:
         #     self.conn = MNSHTTPSConnection(host)
         # else:
@@ -105,6 +105,8 @@ class MNSHttp:
 
     @tornado.gen.coroutine
     def send_request(self, req_inter):
+        if self.http_client is None:
+            self.http_client = tornado.httpclient.AsyncHTTPClient()
         try:
             if self.logger:
                 self.logger.debug("SendRequest %s" % req_inter)
